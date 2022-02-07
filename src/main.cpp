@@ -3,11 +3,12 @@
 
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
+const int LED_OFFSET = 1; // Light every "LED_OFFSET" LED of the LEDs strip
 const uint16_t PixelCount = 200; // Number of LEDs in the LED strip (usually 150 for MoonBoard Mini, 200 for a standard MoonBoard)
 const uint8_t PixelPin = 2;  // Use pin D2 of Arduino Nano 33 BLE
 #define brightness 64 // 0 to 255
 #define additionalledbrightness 32 // 0 to 255
-NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin); // Rgb or Grb, depending on your LED strip
+NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount * LED_OFFSET, PixelPin); // Rgb or Grb, depending on your LED strip
 
 RgbColor red(brightness, 0, 0);
 RgbColor green(0, brightness, 0);
@@ -41,25 +42,25 @@ void setup() {
   // Test LEDs by cycling through the colors red, green, blue, violet and then turning the LEDs off again
   strip.SetPixelColor(0, red);
   for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
+    strip.ShiftRight(1 * LED_OFFSET);
     strip.Show();
     delay(10);
   }
   strip.SetPixelColor(0, green);
   for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
+    strip.ShiftRight(1 * LED_OFFSET);
     strip.Show();
     delay(10);
   }
   strip.SetPixelColor(0, blue);
   for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
+    strip.ShiftRight(1 * LED_OFFSET);
     strip.Show();
     delay(10);
   }
   strip.SetPixelColor(0, violet);
   for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
+    strip.ShiftRight(1 * LED_OFFSET);
     strip.Show();
     delay(10);
   }
@@ -155,11 +156,11 @@ void loop() {
           Serial.print(" --> ");
           Serial.print(additionallednumber);
           if (holdtype == 'S') { // Start hold
-            strip.SetPixelColor(additionallednumber, violet);
+            strip.SetPixelColor(additionallednumber * LED_OFFSET, violet);
             Serial.println(" (violet)");
           }
           if (holdtype == 'P') { // Progress hold
-            strip.SetPixelColor(additionallednumber, violet);
+            strip.SetPixelColor(additionallednumber * LED_OFFSET, violet);
             Serial.println(" (violet)");
           }
           // Finish holds don't get an additional LED!
@@ -196,15 +197,15 @@ void loop() {
       Serial.print(" --> ");
       Serial.print(lednumber);
       if (holdtype == 'S') { // Start hold
-        strip.SetPixelColor(lednumber, green);
+        strip.SetPixelColor(lednumber * LED_OFFSET, green);
         Serial.println(" (green)");
       }
       if (holdtype == 'P') { // Progress hold
-        strip.SetPixelColor(lednumber, blue);
+        strip.SetPixelColor(lednumber * LED_OFFSET, blue);
         Serial.println(" (blue)");
       }
       if (holdtype == 'E') { // End hold
-        strip.SetPixelColor(lednumber, red);
+        strip.SetPixelColor(lednumber * LED_OFFSET, red);
         Serial.println(" (red)");
       }
       
