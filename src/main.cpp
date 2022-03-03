@@ -69,7 +69,6 @@ void setupVariables()
  */
 void setupBuiltinLed()
 {
-  Serial.println("setupBuiltinLed() START");
   // set LED's pin to output mode
   pinMode(LEDR, OUTPUT);
   pinMode(LEDG, OUTPUT);
@@ -79,7 +78,6 @@ void setupBuiltinLed()
   digitalWrite(LEDG, HIGH); // will turn the LED green OFF
   digitalWrite(LEDR, HIGH); // will turn the LED red OFF
   digitalWrite(LEDB, HIGH); // will turn the LED blue OFF
-  Serial.println("setupBuiltinLed() END");
 }
 
 /**
@@ -142,27 +140,6 @@ void setupBle()
       delay(1000);
     }
   }
-}
-
-/**
- * @brief Setup the project
- *
- */
-void setup()
-{
-  delay(1000);
-  Serial.begin(9600);
-
-  // setupBuiltinLed();
-  setupVariables();
-  setupBle();
-  setupBoardLeds();
-
-  // digitalWrite(LEDG, LOW); // will turn the LED green ON
-  Serial.println("");
-  Serial.print("Setup done for the board: ");
-  Serial.println(namesByBoard[board]);
-  Serial.println("Waiting for bluetooth connection from mobile app...");
 }
 
 /**
@@ -274,20 +251,33 @@ void showProblem()
   }
 }
 
+
+/**
+ * @brief Setup the project
+ *
+ */
+void setup()
+{
+  delay(1000);
+  Serial.begin(9600);
+
+  setupVariables();
+  setupBle();
+  setupBoardLeds();
+
+  Serial.println("");
+  Serial.print("Setup done for the board: ");
+  Serial.println(namesByBoard[board]);
+  Serial.println("Waiting for bluetooth connection from mobile app...");
+}
+
+
 void loop()
 {
-
   if (!bleSerial)
   {
-    digitalWrite(LEDG, LOW);
-    digitalWrite(LEDB, HIGH);
     delay(100);
     return;
-  }
-  else
-  {
-    digitalWrite(LEDG, HIGH);
-    digitalWrite(LEDB, LOW);
   }
 
   // Read messages from the BLE UART
@@ -360,10 +350,6 @@ void loop()
     Serial.println("");
 
     showProblem();
-
-    // problemstring = "";               // Reset problem string
-    // useAdditionalLed = false;         // Reset additional LED option
-    // state = STATE_WAIT_CONFIGURATION; // Switch to state 0 (wait for new problem string or configuration)
   }
   delay(100);
 }
