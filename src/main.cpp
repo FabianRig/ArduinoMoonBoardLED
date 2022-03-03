@@ -277,9 +277,6 @@ void showProblem()
 void loop()
 {
 
-  setupBoardLeds();
-  return;
-
   if (!bleSerial)
   {
     digitalWrite(LEDG, LOW);
