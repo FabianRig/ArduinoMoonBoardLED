@@ -115,7 +115,7 @@ void setupBoardLeds()
     strip.SetPixelColor(0, violet);
     for (int i = 0; i < ledCount; i++)
     {
-      strip.ShiftRight(1);
+      strip.ShiftRight(1 * c_ledOffset);
       strip.Show();
       delay(10);
     }
