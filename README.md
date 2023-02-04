@@ -28,7 +28,6 @@ It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
 1. Download and install platformio
 ```
 python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
-
 ```
 2. Download, install and configure arduino-cli
 ```
@@ -37,11 +36,11 @@ curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.
 ~/apps/arduino-cli/bin/arduino-cli core install arduino:mbed_nano
 ```
 3. Clone the repository
-Press the greem "<> Code" button on github and copy the HTTPS url.
-If you don't have `git` installed in your Linux distribution, please install it first.
+Press the green "<> Code" button on github and copy the HTTPS url.
+If you don't have `git` installed on your Linux distribution, please install it first.
 ```
 mkdir ~/src; cd ~/src
-git clone URL
+git clone Put_HTTPS_URL_here
 cd ArduinoMoonBoardLED/
 ```
 4. Adjust config.h
@@ -52,7 +51,7 @@ Follow the instructions in the file ~/src/ArduinoMoonBoardLED/src/config.h in or
 ~/.platformio/penv/bin/platformio run
 ```
 
-6. Attach the Arduino Nano BLE to your computer and upload the firmware
+6. Attach the Arduino Nano BLE to your computer using a MicroUSB cable and upload the firmware
 ```
 ~/apps/arduino-cli/bin/arduino-cli upload -p /dev/ttyACM0 -i .pio/build/nano33ble/firmware.bin
 ```
@@ -62,9 +61,10 @@ Follow the instructions in the file ~/src/ArduinoMoonBoardLED/src/config.h in or
 ~/apps/arduino-cli/bin/arduino-cli monitor -p /dev/ttyACM0
 ```
 
+8. Use the MoonBoard app to connect to the Arduino and show the problems on your board!
 
 ## LED Mapping
-The most common LED wiring pattern (here for a MoonBoard Mini) goes like this (front view):
+The most common LED wiring pattern goes like this (front view):
 - start bottom left (A1),
 - up the column (to A12),
 - one column to the right (to B12),
@@ -74,10 +74,10 @@ The most common LED wiring pattern (here for a MoonBoard Mini) goes like this (f
 
 The MoonBoard App encodes holds in the same way. Hold A1 is 0, hold A2 is 1, hold A3 is 2 and so on.
 
-The array ledmapping[] is used to map hold numbers to LED numbers. You can use custom wiring patterns if necessary. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
+If you need to wire differently, you'll need to adapt the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
 
 ## Good to know
-- Never power the Arduino only when it's connected to the LED string without powering the LED string! This might destroy the first LED!
+- Never power the Arduino alone when it's connected to the LED string without powering the LED string! This may destroy the first LED!
 - The Arduino does not need to be shutdown, you can simply unplug the power source! This is (at least for me) a big improvement when compared to a Raspberry Pi based solution.
 
 ## Pictures
