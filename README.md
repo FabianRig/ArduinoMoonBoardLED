@@ -20,7 +20,7 @@ It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
 2. Install PlatformIO in Visual Studio Code.
 3. Download and open this project.
 4. Adjust config.h settings to your needs (Moonboard type, brightness).
-5. Compile and flash to an Arduino Nano 33 BLE.
+5. Compile and flash to an Arduino Nano 33 IoT.
 6. Use the MoonBoard app to connect to the Arduino and show the problems on your board!
 
 ## How to use (Linux, command line)
