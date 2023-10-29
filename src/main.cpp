@@ -13,7 +13,10 @@ NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 RgbColor red(brightness, 0, 0);
 RgbColor green(0, brightness, 0);
 RgbColor blue(0, 0, brightness);
-RgbColor violet(additionalledbrightness, 0, additionalledbrightness);
+RgbColor yellow(additionalledbrightness, additionalledbrightness, 0);
+RgbColor cyan(0, brightness, brightness);
+RgbColor pink(brightness, 0, brightness/2);
+RgbColor violet(brightness/2, 0, brightness);
 RgbColor black(0);
 
 int state = 0; // Variable to store the current state of the problem string parser
@@ -34,13 +37,7 @@ void setup() {
   strip.Begin(); // Initialize LED strip
   strip.Show(); // Good practice to call Show() in order to clear all LEDs
 
-  // Test LEDs by cycling through the colors red, green, blue, violet and then turning the LEDs off again
-  strip.SetPixelColor(0, red);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
+  // Test LEDs by cycling through the colors and then turning the LEDs off again
   strip.SetPixelColor(0, green);
   for (int i = 0; i < PixelCount; i++) {
     strip.ShiftRight(1);
@@ -53,7 +50,31 @@ void setup() {
     strip.Show();
     delay(10);
   }
+  strip.SetPixelColor(0, yellow);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, cyan);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, pink);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
   strip.SetPixelColor(0, violet);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, red);
   for (int i = 0; i < PixelCount; i++) {
     strip.ShiftRight(1);
     strip.Show();
@@ -151,12 +172,13 @@ void loop() {
           Serial.print(" --> ");
           Serial.print(additionallednumber);
           if (holdtype == 'S') { // Start hold
-            strip.SetPixelColor(additionallednumber, violet);
-            Serial.println(" (violet)");
+            strip.SetPixelColor(additionallednumber, yellow);
+            Serial.println(" (yellow)");
           }
-          if (holdtype == 'P') { // Progress hold
-            strip.SetPixelColor(additionallednumber, violet);
-            Serial.println(" (violet)");
+          // Right, left, match, or foot hold
+          if (holdtype == 'R' || holdtype == 'L' || holdtype == 'M' || holdtype =='F') {
+            strip.SetPixelColor(additionallednumber, yellow);
+            Serial.println(" (yellow)");
           }
           // Finish holds don't get an additional LED!
         }        
@@ -195,9 +217,21 @@ void loop() {
         strip.SetPixelColor(lednumber, green);
         Serial.println(" (green)");
       }
-      if (holdtype == 'P') { // Progress hold
+      if (holdtype == 'R') { // Right hold
         strip.SetPixelColor(lednumber, blue);
         Serial.println(" (blue)");
+      }
+      if (holdtype == 'L') { // Left hold
+        strip.SetPixelColor(lednumber, violet);
+        Serial.println(" (violet)");
+      }
+      if (holdtype == 'M') { // Match hold
+        strip.SetPixelColor(lednumber, pink);
+        Serial.println(" (pink)");
+      }
+      if (holdtype == 'F') { // Foot hold
+        strip.SetPixelColor(lednumber, cyan);
+        Serial.println(" (cyan)");
       }
       if (holdtype == 'E') { // End hold
         strip.SetPixelColor(lednumber, red);

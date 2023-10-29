@@ -2,7 +2,7 @@
 // #define MOONBOARD_MINI
 
 // Adjust brightness settings to your personal needs and light situation
-#define brightness 64 // 0 to 255
+#define brightness 64 // 0 to 255; needs to be divisible by 2!
 #define additionalledbrightness 32 // 0 to 255
 
 #define RGB // Change this to GRB if your colors are off
