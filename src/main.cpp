@@ -176,7 +176,7 @@ void loop() {
             Serial.println(" (yellow)");
           }
           // Right, left, match, or foot hold
-          if (holdtype == 'R' || holdtype == 'L' || holdtype == 'M' || holdtype =='F') {
+          if (holdtype == 'R' || holdtype == 'L' || holdtype == 'M' || holdtype =='F' || holdtype =='P') {
             strip.SetPixelColor(additionallednumber, yellow);
             Serial.println(" (yellow)");
           }
@@ -217,7 +217,7 @@ void loop() {
         strip.SetPixelColor(lednumber, green);
         Serial.println(" (green)");
       }
-      if (holdtype == 'R') { // Right hold
+      if (holdtype == 'R' || holdtype =='P') { // Right hold
         strip.SetPixelColor(lednumber, blue);
         Serial.println(" (blue)");
       }
