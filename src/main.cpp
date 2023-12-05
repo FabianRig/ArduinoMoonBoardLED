@@ -5,9 +5,9 @@
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 #ifdef GRB
-NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
+NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount * ledoffset, PixelPin);
 #else
-NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
+NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount * ledoffset, PixelPin);
 #endif
 
 RgbColor red(brightness, 0, 0);
