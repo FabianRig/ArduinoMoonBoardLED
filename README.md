@@ -42,23 +42,26 @@ Note: You can use different lengths than 25 cm. If you use shorter cables, you m
 
 1. Download and install platformio
 ```
-python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
+curl -fsSL -o /tmp/get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
+python3 /tmp/get-platformio.py
+
 ```
 2. Download, install and configure arduino-cli
 ```
-mkdir ~/apps/arduino-cli; cd ~/apps/arduino-cli
+mkdir -p ~/apps/arduino-cli; cd ~/apps/arduino-cli
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 ~/apps/arduino-cli/bin/arduino-cli core install arduino:mbed_nano
 ```
 3. Clone the repository
-Press the green "<> Code" button on github and copy the HTTPS url.
+Press the green "Code" button on github and copy the HTTPS url.
 If you don't have `git` installed on your Linux distribution, please install it first.
 ```
-mkdir ~/src; cd ~/src
+mkdir -p ~/src; cd ~/src
 git clone Put_HTTPS_URL_here
 cd ArduinoMoonBoardLED/
 ```
 4. Adjust config.h
+
 Follow the instructions in the file ~/src/ArduinoMoonBoardLED/src/config.h in order to adjust the configuration to your setup.
 
 5. Compile
