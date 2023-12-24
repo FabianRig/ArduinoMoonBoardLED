@@ -1,24 +1,39 @@
-# ArduinoMoonBoardLED: A Simple MoonBoard BLE LED System
+# ArduinoMoonBoardLED: A Simple Arduino MoonBoard Bluetooth Low Energy (BLE) LED System
 
-This project aims at providing an easy to use solution for building your own MoonBoard LED system. It is both compatible with a normal MoonBoard as well as with the MoonBoard Mini. You need an Arduino Nano 33 BLE, a WS2811 LED string with 25 cm wire length, and an appropriate power source. 
+## Introduction
+
+This project aims at providing an easy to use solution for building your own MoonBoard LED system using an Arduino. It is both compatible with a normal MoonBoard as well as with the MoonBoard Mini. You need an Arduino Nano 33 BLE (buy the original!), a WS2811 LED string with 25 cm wire length, and an appropriate power source. 
+
+As of November 2023 this project is only compatible with the "new" MoonBoard app. All features (show beta, show lights above hold) can be used.
 
 ![mini_benchmark](https://user-images.githubusercontent.com/88741530/129411463-636b222b-e963-4542-a1dd-b33eae562bf2.jpg)
 
-If you want a product that just works, please buy the one offered by Moon Climbing! This is a project which requires some work and still might not work as well as the original. To be absolutely clear: This project is provided as-is. I take absolutely no responsibility that it works as expected. In fact, it might break at any time. You have been warned!
+## Please READ THIS FIRST
+
+- IMPORTANT: If you want a product that just works, please buy the one offered by Moon Climbing! This project is neither supported nor endorsed by Moon Climbing!
+- This is a project which requires some work and still might not work as well as the original.
+- To be absolutely clear: This project is provided as-is. I take absolutely no responsibility that it works as expected. In fact, it might break at any time. You have been warned!
+- Never power the Arduino only without powering the LEDs when the data wire is connected to the LED string! This may destroy the first LED! Just use the same power source for both of them and don't disconnect it.
 
 ## Thanks
+
 All the heavy lifting in this project is done by two awesome libraries: NeoPixelBus (for the LED string) and HardwareBLESerial (for BLE functionality). They make it possible to keep this project quite short, easy to understand, and easily maintainable.
 
 ## Wiring
 
-The Led strip has three wires: +5V, GND and data. Usually, blue is GND/negative, brown is positive, yellow/green is data. 
-Please double-check! Connect the data line to pin D2 of the Arduino (unless you changed it in config.h). 
-It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
+The LED strip has three wires: +5V, GND and data. Usually, blue is GND ("negative"), brown is +5V ("positive"), yellow/green is data. Please double-check!
 
-## How to use (Windows)
+Connect the data line to pin D2 of the Arduino (unless you changed it in config.h). It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
+
+Important: Make sure that both the Arduino and the LED string share GND! Simply power both the LED string and the Arduino by the same power source. Use the USB connection for flashing and debugging only! If GND is not connected, the LED string will not work.
+
+Note: You can use different lengths than 25 cm. If you use shorter cables, you might need to adjust the pattern in order to skip some LEDs (see below).
+
+## How to use (Windows and Linux via a Package Manager)
+
 1. Download and install Visual Studio Code.
 2. Install PlatformIO in Visual Studio Code.
-3. Download and open this project.
+3. Download and open this project. To do so, either download it as a zip file or git clone it.
 4. Adjust config.h settings to your needs (Moonboard type, brightness).
 5. Compile and flash to an Arduino Nano 33 IoT.
 6. Use the MoonBoard app to connect to the Arduino and show the problems on your board!
@@ -27,23 +42,26 @@ It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
 
 1. Download and install platformio
 ```
-python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
+curl -fsSL -o /tmp/get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
+python3 /tmp/get-platformio.py
+
 ```
 2. Download, install and configure arduino-cli
 ```
-mkdir ~/apps/arduino-cli; cd ~/apps/arduino-cli
+mkdir -p ~/apps/arduino-cli; cd ~/apps/arduino-cli
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 ~/apps/arduino-cli/bin/arduino-cli core install arduino:mbed_nano
 ```
 3. Clone the repository
-Press the green "<> Code" button on github and copy the HTTPS url.
+Press the green "Code" button on github and copy the HTTPS url.
 If you don't have `git` installed on your Linux distribution, please install it first.
 ```
-mkdir ~/src; cd ~/src
+mkdir -p ~/src; cd ~/src
 git clone Put_HTTPS_URL_here
 cd ArduinoMoonBoardLED/
 ```
 4. Adjust config.h
+
 Follow the instructions in the file ~/src/ArduinoMoonBoardLED/src/config.h in order to adjust the configuration to your setup.
 
 5. Compile
@@ -63,7 +81,7 @@ Follow the instructions in the file ~/src/ArduinoMoonBoardLED/src/config.h in or
 
 8. Use the MoonBoard app to connect to the Arduino and show the problems on your board!
 
-## LED Mapping
+## Advanced: LED Mapping
 The most common LED wiring pattern goes like this (front view):
 - start bottom left (A1),
 - up the column (to A12),
@@ -74,11 +92,7 @@ The most common LED wiring pattern goes like this (front view):
 
 The MoonBoard App encodes holds in the same way. Hold A1 is 0, hold A2 is 1, hold A3 is 2 and so on.
 
-If you need to wire differently, you'll need to adapt the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
-
-## Good to know
-- Never power the Arduino alone when it's connected to the LED string without powering the LED string! This may destroy the first LED!
-- The Arduino does not need to be shutdown, you can simply unplug the power source! This is (at least for me) a big improvement when compared to a Raspberry Pi based solution.
+If you need to wire differently, you'll need to adjust the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
 
 ## Pictures
 ![led_test](https://user-images.githubusercontent.com/88741530/129411527-84e11098-1192-4a29-a052-b712ad3ca17c.jpg)
