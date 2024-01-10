@@ -4,7 +4,7 @@
 
 This project aims at providing an easy to use solution for building your own MoonBoard LED system using an Arduino. It is both compatible with a normal MoonBoard as well as with the MoonBoard Mini. You need an Arduino Nano 33 BLE (buy the original!), a WS2811 LED string with 25 cm wire length, and an appropriate power source. 
 
-As of November 2023 this project is only compatible with the "new" MoonBoard app. All features (show beta, show lights above hold) can be used.
+As of November 2023 this project is only compatible with the "new" MoonBoard app. All features (show beta, show lights above hold) of the app can be used. One exception is the multi user feature: With this project, only one user at a time can connect to the LED system. 
 
 ![mini_benchmark](https://user-images.githubusercontent.com/88741530/129411463-636b222b-e963-4542-a1dd-b33eae562bf2.jpg)
 
