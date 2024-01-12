@@ -21,7 +21,7 @@ All the heavy lifting in this project is done by two awesome libraries: NeoPixel
 
 ## Wiring
 
-The LED strip has three wires: +5V, GND and data. Usually, blue is GND ("negative"), brown is +5V ("positive"), yellow/green is data. Please double-check!
+The LED strip has three wires: +5V, GND and data. Usually, blue is GND ("negative"), brown is +5V ("positive"), yellow/green is data. Please double-check! You can find a wiring diagram at the bottom of this page.
 
 Connect the data line to pin D2 of the Arduino (unless you changed it in config.h). It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
 
@@ -99,4 +99,5 @@ If you need to wire differently, you'll need to adjust the ledmapping[] array in
 ![mini_back](https://user-images.githubusercontent.com/88741530/129411542-174241cc-c898-45f9-965f-cb75b34a1869.jpg)
 ![box](https://user-images.githubusercontent.com/88741530/129411548-5262a5c9-6b06-4bc8-9d68-e9e363823fdb.jpg)
 ![arduino_wiring](https://user-images.githubusercontent.com/88741530/129411556-ead82345-6687-478b-b9a4-95f1d1ac40c2.jpg)
+![wiring](https://github.com/FabianRig/ArduinoMoonBoardLED/assets/88741530/91c049ea-f41a-45a3-8c80-8d3ef9820e9d)
 
