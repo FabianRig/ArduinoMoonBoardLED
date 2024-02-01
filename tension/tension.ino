@@ -8,7 +8,8 @@ const int buttonPin = 4; // set buttonPin to digital pin 4
 BLEService connectionService("4488b571-7806-4df6-bcff-a2897e4953ff"); // create service
 BLEService ledService("6E400001-B5A3-F393-E0A9-E50E24DCCA9E"); // create service
 
-BLEWordCharacteristic tensionCharacteristic("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", BLEWrite | BLENotify);
+BLECharacteristic tensionCharacteristic("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", BLEWrite | BLENotify,"");
+BLEDescriptor tensionDescriptor("00002902-0000-1000-8000-00805f9b34fb", "");
 
 
 void setup() {
@@ -34,7 +35,7 @@ void setup() {
   BLE.addService(connectionService);
   BLE.addService(ledService);
 
-  tensionCharacteristic.writeValue(0);
+  // tensionCharacteristic.writeValue(0);
 
   // start advertising
   BLE.advertise();
@@ -48,24 +49,42 @@ void loop() {
 
   // if a central is connected to peripheral:
   if (central) {
+    
+  BLE.poll();
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
 
     // while the central is still connected to peripheral:
     while (central.connected()) {
-      // if the remote device wrote to the characteristic,
-      // use the value to control the LED:
-      int32_t value;
+      if (tensionCharacteristic.valueUpdated()) {
+                  Serial.println("Value updated!");
 
-      value = tensionCharacteristic.readValue(value);
-      Serial.print(F("value: "));
-      Serial.println(value);
+        // yes, get the value, characteristic is 1 byte so use byte value
+        int32_t value = 0;
+
+        tensionCharacteristic.readValue(value);
+
+        if (value & 0x01) {
+          // first bit corresponds to the right button
+          Serial.println("1");
+        }else if (value & 0x02) {
+          // second bit corresponds to the left button
+          Serial.println("2");
+        }else if (value & 0x03) {
+          // second bit corresponds to the left button
+          Serial.println("3");
+        } else {
+          Serial.print("value: ");
+          Serial.print(value);
+
+        }
+      }
     }
 
     // when the central disconnects, print it out:
     Serial.print(F("Disconnected from central: "));
     Serial.println(central.address());
   }
-  
 }
+  
