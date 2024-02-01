@@ -26,7 +26,7 @@ bool useadditionalled = false; // Variable to store the additional LED setting
 void setup() {
   Serial.begin(9600);
 
-  if (!bleSerial.beginAndSetupBLE("MoonBoard.Tension.Vadim")) { // Initialize BLE UART and check if it is successful
+  if (!bleSerial.beginAndSetupBLE("Tension.MoonBoard.Vadim")) { // Initialize BLE UART and check if it is successful
     // This should never happen as it means that the BLE setup failed and the program cannot run!
     while (true) {
       Serial.println("BLE setup failed!");

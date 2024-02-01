@@ -1,31 +1,14 @@
-/*
-  Button LED
 
-  This example creates a Bluetooth® Low Energy peripheral with service that contains a
-  characteristic to control an LED and another characteristic that
-  represents the state of the button.
-
-  The circuit:
-  - Arduino MKR WiFi 1010, Arduino Uno WiFi Rev2 board, Arduino Nano 33 IoT,
-    Arduino Nano 33 BLE, or Arduino Nano 33 BLE Sense board.
-  - Button connected to pin 4
-
-  You can use a generic Bluetooth® Low Energy central app, like LightBlue (iOS and Android) or
-  nRF Connect (Android), to interact with the services and characteristics
-  created in this sketch.
-
-  This example code is in the public domain.
-*/
 
 #include <ArduinoBLE.h>
 
 const int ledPin = LED_BUILTIN; // set ledPin to on-board LED
 const int buttonPin = 4; // set buttonPin to digital pin 4
 
+BLEService connectionService("4488b571-7806-4df6-bcff-a2897e4953ff"); // create service
 BLEService ledService("6E400001-B5A3-F393-E0A9-E50E24DCCA9E"); // create service
 
-// create switch characteristic and allow remote device to read and write
-BLEByteCharacteristic tensionCharacteristic("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", BLERead | BLENotify);
+BLEWordCharacteristic tensionCharacteristic("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", BLEWrite | BLENotify);
 
 
 void setup() {
@@ -40,17 +23,18 @@ void setup() {
   }
 
   // set the local name peripheral advertises
-  BLE.setLocalName("Tension");
+  BLE.setLocalName("Tension.Moonboard.Vadim");
   // set the UUID for the service this peripheral advertises:
-  BLE.setAdvertisedService(ledService);
+  BLE.setAdvertisedService(connectionService);
 
   // add the characteristics to the service
-  ledService.addCharacteristic(ledCharacteristic);
+  ledService.addCharacteristic(tensionCharacteristic);
 
   // add the service
+  BLE.addService(connectionService);
   BLE.addService(ledService);
 
-  ledCharacteristic.writeValue(0);
+  tensionCharacteristic.writeValue(0);
 
   // start advertising
   BLE.advertise();
@@ -59,17 +43,29 @@ void setup() {
 }
 
 void loop() {
-  while (peripheral.connected()) {
-    // while the peripheral is connected
+  // listen for Bluetooth® Low Energy peripherals to connect:
+  BLEDevice central = BLE.central();
 
-    // check if the value of the simple key characteristic has been updated
-    if (tensionCharacteristic.valueUpdated()) {
-      // yes, get the value, characteristic is 1 byte so use byte value
-      byte value = 0;
+  // if a central is connected to peripheral:
+  if (central) {
+    Serial.print("Connected to central: ");
+    // print the central's MAC address:
+    Serial.println(central.address());
 
-      tensionCharacteristic.readValue(value);
-        // first bit corresponds to the right button
-      Serial.println(byte, HEX);
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      // if the remote device wrote to the characteristic,
+      // use the value to control the LED:
+      int32_t value;
+
+      value = tensionCharacteristic.readValue(value);
+      Serial.print(F("value: "));
+      Serial.println(value);
     }
+
+    // when the central disconnects, print it out:
+    Serial.print(F("Disconnected from central: "));
+    Serial.println(central.address());
   }
+  
 }
