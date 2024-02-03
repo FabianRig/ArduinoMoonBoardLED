@@ -4,7 +4,7 @@
 
 This project aims at providing an easy to use solution for building your own MoonBoard LED system using an Arduino. It is both compatible with a normal MoonBoard as well as with the MoonBoard Mini. You need an Arduino Nano 33 BLE (buy the original!), a WS2811 LED string with 25 cm wire length, and an appropriate power source. 
 
-As of November 2023 this project is only compatible with the "new" MoonBoard app. All features (show beta, show lights above hold) of the app can be used. One exception is the multi user feature: With this project, only one user at a time can connect to the LED system. However, there is a hardware workaround for that. See below.
+This project is compatible with the "new" MoonBoard app. All features (show beta, show lights above holds) of the app can be used. Multiple users can connect at the same time (multi user support).
 
 ![mini_benchmark](https://user-images.githubusercontent.com/88741530/129411463-636b222b-e963-4542-a1dd-b33eae562bf2.jpg)
 
@@ -93,9 +93,6 @@ The most common LED wiring pattern goes like this (front view):
 The MoonBoard App encodes holds in the same way. Hold A1 is 0, hold A2 is 1, hold A3 is 2 and so on.
 
 If you need to wire differently, you'll need to adjust the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
-
-## Advanced: Multi User Support
-The software doesn't work for multiple users. However, there is an easy hardware solution. You can use two Arduinos and connect them simultaneously to the data line using a pair of Schottky diodes 1A 1N5819. Check out https://github.com/FabianRig/ArduinoMoonBoardLED/issues/19#issuecomment-1888955329.
 
 ## Pictures
 ![led_test](https://user-images.githubusercontent.com/88741530/129411527-84e11098-1192-4a29-a052-b712ad3ca17c.jpg)
