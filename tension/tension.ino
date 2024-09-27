@@ -24,7 +24,7 @@ void setup() {
   }
 
   // set the local name peripheral advertises
-  BLE.setLocalName("Tension.Moonboard.Vadim");
+  BLE.setLocalName("Tension Vadim");
   // set the UUID for the service this peripheral advertises:
   BLE.setAdvertisedService(connectionService);
 
