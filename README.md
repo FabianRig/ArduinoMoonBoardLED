@@ -92,7 +92,7 @@ The most common LED wiring pattern goes like this (front view):
 
 The MoonBoard App encodes holds in the same way. Hold A1 is 0, hold A2 is 1, hold A3 is 2 and so on.
 
-If you need to wire differently, you'll need to adjust the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on).
+If you need to wire differently, you'll need to adjust the ledmapping[] array in config.h which maps hold numbers to LED numbers. The standard mapping is n-->n (e.g. hold #0 is LED #0, hold #1 is LED #1 and so on). You can find an example for a custom mapping in config.h: The first few LEDs are skipped, then 24 LEDs in a row are used (for a MoonBoard Mini), then 2 LEDs are skipped (to get across a wooden beam at the back) etc. Adjust this to your needs if you have a custom wiring and/or want to skip LEDs to facilitate wiring your LEDs at the back of your board.
 
 ## Pictures
 ![led_test](https://user-images.githubusercontent.com/88741530/129411527-84e11098-1192-4a29-a052-b712ad3ca17c.jpg)
