@@ -20,7 +20,8 @@ RgbColor violet(brightness/2, 0, brightness);
 RgbColor black(0);
 
 int state = 0; // Variable to store the current state of the problem string parser
-String problemstring = ""; // Variable to store the current problem string
+char problemstring[500]; // Variable to store the current problem string
+char problemstringstore[500]; // Variable to store the current problem string
 bool useadditionalled = false; // Variable to store the additional LED setting
 
 void setup() {
@@ -135,7 +136,8 @@ void loop() {
         state = 4; // Switch to state 4 (start parsing and show LEDs)
         continue;
       }
-      problemstring.concat(c); // add current character to problem string
+
+      strcat(problemstring, &c); // add current character to problem string
     }
   }
 
@@ -147,23 +149,18 @@ void loop() {
     Serial.println(problemstring);
     Serial.println("");
 
-    String problemstringstore = problemstring; // store copy of problem string
+    strcpy(problemstringstore, problemstring); // store copy of problem string
 
     if (useadditionalled) { // only render additional LEDs in first loop
       Serial.println("Additional LEDs:");
-      while(true){
-        int pos = problemstring.indexOf(','); // Hold descriptions are separated by a comma (,)
-        
-        String hold;
-        if (pos > 0) { // Still holds left in the problem string
-          hold = problemstring.substring(0, pos); // Extract one hold description
-        }
-        else { // Last hold in the problem string
-          hold = problemstring; 
-        }
 
-        char holdtype = hold.charAt(0); // Hold descriptions consist of a hold type (S, P, E) ...
-        int holdnumber = hold.substring(1).toInt(); // ... and a hold number
+      char *hold = strtok(problemstring, ", "); 
+      // Keep printing tokens while one of the
+      // delimiters present in str[].
+      while (hold != NULL) {
+
+        char holdtype = hold[0]; // Hold descriptions consist of a hold type (S, P, E) ...
+        int holdnumber = atoi(&hold[1]); // ... and a hold number
         int lednumber = ledmapping[holdnumber];
         int additionallednumber = lednumber + additionalledmapping[holdnumber];
         if (additionalledmapping[holdnumber] != 0) {
@@ -182,32 +179,21 @@ void loop() {
           }
           // Finish holds don't get an additional LED!
         }        
-
-        if (pos == -1) { // Last hold has been processed!
-          Serial.println("");
-          break;
-        }
-
-        problemstring = problemstring.substring(pos+1, problemstring.length()); // Remove processed hold from string
+        
+        hold = strtok(NULL, " - ");// get next hold
       }
 
-      problemstring = problemstringstore; // Restore problem string for rendering normal hold LEDs
+      strcpy(problemstring, problemstringstore); // Restore problem string for rendering normal hold LEDs
     }
 
     Serial.println("Problem LEDs:");
-    while(true){ // render all normal LEDs (possibly overriding additional LEDs)
-      int pos = problemstring.indexOf(','); // Hold descriptions are separated by a comma (,)
-      
-      String hold;
-      if (pos > 0) { // Still holds left in the problem string
-        hold = problemstring.substring(0, pos); // Extract one hold description
-      }
-      else { // Last hold in the problem string
-        hold = problemstring; 
-      }
+    char *hold = strtok(problemstring, ", "); 
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (hold != NULL) {
 
-      char holdtype = hold.charAt(0); // Hold descriptions consist of a hold type (S, P, E) ...
-      int holdnumber = hold.substring(1).toInt(); // ... and a hold number
+      char holdtype = hold[0]; // Hold descriptions consist of a hold type (S, P, E) ...
+      int holdnumber = atoi(&hold[1]); // ... and a hold number
       int lednumber = ledmapping[holdnumber];
       Serial.print(holdtype);
       Serial.print(holdnumber);
@@ -238,16 +224,16 @@ void loop() {
         Serial.println(" (red)");
       }
       
-      if (pos == -1) { // Last hold has been processed!
+      hold = strtok(NULL, " - "); // get next hold
+
+      if (hold == NULL) { // Last hold has been processed!
         strip.Show(); // Light up all hold (and additional) LEDs
-        problemstring = ""; // Reset problem string
+        strcpy(problemstring, ""); // Reset problem string
         useadditionalled = false; // Reset additional LED option
         state = 0; // Switch to state 0 (wait for new problem string or configuration)
         Serial.println("---------\n");
         break;
       }
-
-      problemstring = problemstring.substring(pos+1, problemstring.length()); // Remove processed hold from string
     }
   }
 }
