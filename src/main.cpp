@@ -1,14 +1,17 @@
-#include <HardwareBLESerial.h>
+#include <ArduinoBLE.h>
 #include <NeoPixelBus.h>
 #include <config.h>
-
-HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 #ifdef GRB
 NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 #else
 NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 #endif
+
+BLEService uartService = BLEService("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+BLECharacteristic receiveCharacteristic = BLECharacteristic("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", BLEWriteWithoutResponse, 20);
+BLECharacteristic transmitCharacteristic = BLECharacteristic("6E400003-B5A3-F393-E0A9-E50E24DCCA9E", BLENotify, 20);
+
 
 RgbColor red(brightness, 0, 0);
 RgbColor green(0, brightness, 0);
@@ -23,78 +26,23 @@ int state = 0; // Variable to store the current state of the problem string pars
 String problemstring = ""; // Variable to store the current problem string
 bool useadditionalled = false; // Variable to store the additional LED setting
 
-void setup() {
-  Serial.begin(9600);
 
-  if (!bleSerial.beginAndSetupBLE("Moonboard")) { // Initialize BLE UART and check if it is successful
-    // This should never happen as it means that the BLE setup failed and the program cannot run!
-    while (true) {
-      Serial.println("BLE setup failed!");
-      delay(1000);
-    }
-  }
-
-  strip.Begin(); // Initialize LED strip
-  strip.Show(); // Good practice to call Show() in order to clear all LEDs
-
-  // Test LEDs by cycling through the colors and then turning the LEDs off again
-  strip.SetPixelColor(0, green);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, blue);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, yellow);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, cyan);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, pink);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, violet);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-  strip.SetPixelColor(0, red);
-  for (int i = 0; i < PixelCount; i++) {
-    strip.ShiftRight(1);
-    strip.Show();
-    delay(10);
-  }
-
-  strip.ClearTo(black);
-  strip.Show();
-
-  // Wait for the MoonBoard App to connect
-  while (!bleSerial);
+void ConnectHandler(BLEDevice central) {
+  Serial.print("Connected event, central: ");
+  Serial.println(central.address());
+  BLE.advertise();
 }
 
-void loop() {
-  // Read messages from the BLE UART
-  bleSerial.poll();
-  
-  // Check if message parts are available on the BLE UART
-  while (bleSerial.available() > 0) {
-    char c = bleSerial.read();
+void DisconnectHandler(BLEDevice central) {
+  Serial.print("Disconnected event, central: ");
+  Serial.println(central.address());
+  BLE.advertise();
+}
+
+void display(byte incoming[], int length){
+// Check if message parts are available on the BLE UART
+  for (int i = 0; i <length; i++) {
+    char c = incoming[i];
 
     // State 0: wait for configuration instructions (sent only if V2 option is enabled in app) or beginning of problem string
     if (state == 0) {
@@ -138,6 +86,7 @@ void loop() {
       problemstring.concat(c); // add current character to problem string
     }
   }
+  
 
   // State 4: complete problem string received, start parsing
   if (state == 4) {
@@ -249,5 +198,114 @@ void loop() {
 
       problemstring = problemstring.substring(pos+1, problemstring.length()); // Remove processed hold from string
     }
+  }
+}
+
+void characteristicWritten(BLEDevice central, BLECharacteristic characteristic) {
+  int length = characteristic.valueLength();
+  byte incoming[length];
+
+  characteristic.readValue(incoming, length);
+
+  for (int i = 0; i < length; i++) {
+    Serial.print(incoming[i]);
+    Serial.print("-");
+  }
+  Serial.println();
+
+  display(incoming, length);
+
+}
+
+void setup() {
+  Serial.begin(9600);
+
+
+  strip.Begin(); // Initialize LED strip
+  strip.Show(); // Good practice to call Show() in order to clear all LEDs
+
+  // Test LEDs by cycling through the colors and then turning the LEDs off again
+  strip.SetPixelColor(0, green);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, blue);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, yellow);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, cyan);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, pink);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, violet);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+  strip.SetPixelColor(0, red);
+  for (int i = 0; i < PixelCount; i++) {
+    strip.ShiftRight(1);
+    strip.Show();
+    delay(10);
+  }
+
+  strip.ClearTo(black);
+  strip.Show();
+
+  if (!BLE.begin()) {
+    while (1);
+  }
+  BLE.setLocalName("Moonboard");
+  BLE.setDeviceName("Moonboard");
+
+  BLE.setAdvertisedService(uartService);
+  uartService.addCharacteristic(receiveCharacteristic);
+  uartService.addCharacteristic(transmitCharacteristic);
+  receiveCharacteristic.setEventHandler(BLEWritten, characteristicWritten);
+  BLE.addService(uartService);
+  BLE.setEventHandler(BLEConnected, ConnectHandler);
+  BLE.setEventHandler(BLEDisconnected, DisconnectHandler);
+
+  BLE.advertise();
+}
+
+void loop() {
+  // listen for Bluetooth® Low Energy peripherals to connect:
+  BLEDevice central = BLE.central();
+
+  // if a central is connected to peripheral:
+  if (central) {
+
+    Serial.print("Connected to central: ");
+    // print the central's MAC address:
+    Serial.println(central.address());
+
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      BLE.poll();
+    }
+
+    // when the central disconnects, print it out:
+    Serial.print(F("Disconnected from central: "));
+    Serial.println(central.address());
   }
 }
