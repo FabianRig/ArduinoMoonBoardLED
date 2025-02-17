@@ -22,6 +22,7 @@ RgbColor black(0);
 int state = 0; // Variable to store the current state of the problem string parser
 String problemstring = ""; // Variable to store the current problem string
 bool useadditionalled = false; // Variable to store the additional LED setting
+int problem_loaded_time = 0; // Variable to store the time when a problem was loaded
 
 void setup() {
   Serial.begin(9600);
@@ -242,6 +243,7 @@ void loop() {
         strip.Show(); // Light up all hold (and additional) LEDs
         problemstring = ""; // Reset problem string
         useadditionalled = false; // Reset additional LED option
+        problem_loaded_time = millis(); // Set problem loaded time
         state = 0; // Switch to state 0 (wait for new problem string or configuration)
         Serial.println("---------\n");
         break;
@@ -249,5 +251,17 @@ void loop() {
 
       problemstring = problemstring.substring(pos+1, problemstring.length()); // Remove processed hold from string
     }
+  }
+
+  // When "auto turn off" enabled, clear the LEDs after x minutes of inactivity
+  if (AUTO_TURN_OFF && problem_loaded_time && millis() - problem_loaded_time > AUTO_TURN_OFF_MINUTES * 60000) {
+    Serial.println("---------\n");
+    Serial.println("Turning off LEDs due to inactivity");
+
+    strip.ClearTo(black); // Turn off all LEDs in LED string
+    strip.Show(); // Light up all hold (and additional) LEDs
+    problem_loaded_time = 0; // Reset problem loaded time
+
+    Serial.println("---------\n");
   }
 }
