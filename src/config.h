@@ -7,6 +7,8 @@
 
 #define RGB // Change this to GRB if your colors are off
 
+#define BLUETOOTH_NAME "MoonBoard A" // Change this to give your MoonBoard a unique name
+
 #define AUTO_TURN_OFF false // Set to true if you want the LEDs to turn off after inactivity
 #define AUTO_TURN_OFF_MINUTES 30 // Set the number of minutes after which the LEDs should turn off if there is no activity
 
