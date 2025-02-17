@@ -10,13 +10,13 @@ NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 NeoPixelBus<NeoRgbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 #endif
 
-RgbColor red(brightness, 0, 0);
-RgbColor green(0, brightness, 0);
-RgbColor blue(0, 0, brightness);
-RgbColor yellow(additionalledbrightness, additionalledbrightness, 0);
-RgbColor cyan(0, brightness, brightness);
-RgbColor pink(brightness, 0, brightness/2);
-RgbColor violet(brightness/2, 0, brightness);
+RgbColor red(BRIGHTNESS, 0, 0);
+RgbColor green(0, BRIGHTNESS, 0);
+RgbColor blue(0, 0, BRIGHTNESS);
+RgbColor yellow(ADDITIONAL_LED_BRIGHTNESS, ADDITIONAL_LED_BRIGHTNESS, 0);
+RgbColor cyan(0, BRIGHTNESS, BRIGHTNESS);
+RgbColor pink(BRIGHTNESS, 0, BRIGHTNESS/2);
+RgbColor violet(BRIGHTNESS/2, 0, BRIGHTNESS);
 RgbColor black(0);
 
 int state = 0; // Variable to store the current state of the problem string parser
