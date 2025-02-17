@@ -12,7 +12,7 @@
 #define AUTO_TURN_OFF false // Set to true if you want the LEDs to turn off after inactivity
 #define AUTO_TURN_OFF_MINUTES 30 // Set the number of minutes after which the LEDs should turn off if there is no activity
 
-// Settings below ususally don't need to be adjusted unless you have a special situation
+// Settings below usually don't need to be adjusted unless you have a special situation
 
 // Number of LEDs in the LED strip (usually 150 for MoonBoard Mini, 200 for a standard MoonBoard)
 // Adjust only if you have a special setup
