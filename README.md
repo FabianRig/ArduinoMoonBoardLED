@@ -53,6 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.
 ~/apps/arduino-cli/bin/arduino-cli core install arduino:mbed_nano
 ```
 3. Clone the repository
+
 Press the green "Code" button on github and copy the HTTPS url.
 If you don't have `git` installed on your Linux distribution, please install it first.
 ```
