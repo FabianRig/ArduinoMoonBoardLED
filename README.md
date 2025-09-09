@@ -23,7 +23,7 @@ All the heavy lifting in this project is done by two awesome libraries: NeoPixel
 
 The LED strip has three wires: +5V, GND and data. Usually, blue is GND ("negative"), brown is +5V ("positive"), yellow/green is data. Please double-check! You can find a wiring diagram at the bottom of this page.
 
-Connect the data line to pin D2 of the Arduino (unless you changed it in config.h). It might be a good idea to use a resistor (e.g. 330 ohms) in the data line!
+Connect the data line to pin D2 of the Arduino (unless you changed it in config.h). It might be a good idea to use a resistor (e.g. 330 ohms) in the data line! In case a 330 ohms resistor doesn't work, you might try a lower one (e.g. 220 ohms).
 
 Important: Make sure that both the Arduino and the LED string share GND! Simply power both the LED string and the Arduino by the same power source. Use the USB connection for flashing and debugging only! If GND is not connected, the LED string will not work.
 
