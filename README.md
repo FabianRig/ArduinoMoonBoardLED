@@ -6,6 +6,8 @@ This project aims at providing an easy to use solution for building your own Moo
 
 This project is compatible with the "new" MoonBoard app. All features (show beta, show lights above holds) of the app can be used. Multiple users can connect at the same time (multi user support).
 
+Update (2026): It is compatible with the updated MoonBoard app version! However, many users report general problems with the app (both on Android as well as on Apple devices). In case of problems you might try ![boardsesh](https://github.com/boardsesh/boardsesh) as an alternative.
+
 ![mini_benchmark](https://user-images.githubusercontent.com/88741530/129411463-636b222b-e963-4542-a1dd-b33eae562bf2.jpg)
 
 ## Please READ THIS FIRST
